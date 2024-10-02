@@ -1,0 +1,31 @@
+services:
+  api:
+    build:
+      dockerfile: docker/backend/Dockerfile
+    volumes:
+      - ../insider_backend:/var/www/html
+    ports:
+      - "9000:9000"
+    command: > 
+      sh -c "composer install && php-fpm"
+
+  api-nginx:
+    image: nginx:latest
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
+    ports:
+      - "81:81"
+
+  frontend:
+    build:
+      context: ../insider_frontend
+      dockerfile: ../insider_dev/docker/frontend/Dockerfile
+    volumes:
+      - ./docker/frontend/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+
+  redis:
+    image: redis:alpine

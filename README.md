@@ -7,4 +7,5 @@
 
    ```bash
    git clone git@github.com:KirylJazzSax/league_devenv.git
+   cd league_devenv
    make up
